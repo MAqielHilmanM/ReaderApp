@@ -23,19 +23,21 @@ import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
     NfcAdapter nfcAdapter;
-    PendingIntent pendingIntent;
-    IntentFilter[] intentFilters;
+    private static final String TAG = "NFC" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter != null && nfcAdapter.isEnabled()){
+            Log.e(TAG, "onCreate: "+"Nfc Available" );
             Toast.makeText(this,"NfC Available",Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(this,"NfC not Available",Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCreate: "+"Nfc Not Available");
         }
     }
 
@@ -51,79 +53,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        if (intent.hasExtra(NfcAdapter.EXTRA_TAG)){
-            Toast.makeText(this,"Nfc Intent received!",Toast.LENGTH_SHORT).show();
-            Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            if(parcelables != null && parcelables.length > 0){
-                readTextFromMessage((NdefMessage)parcelables[0]);
-            }else {
-                Toast.makeText(this,"No Message",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void readTextFromMessage(NdefMessage parcelable) {
-        NdefRecord[] ndefRecords = parcelable.getRecords();
-        if(ndefRecords != null && ndefRecords.length > 0){
-            NdefRecord ndefRecord = ndefRecords[0];
-            String tagContent = getTextFromNdefRecord(ndefRecord);
-            Toast.makeText(this,"RECORD = "+tagContent,Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this,"No Record",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-
-        pendingIntent = PendingIntent.getActivity(this,0,intent,0);
-        intentFilters = new IntentFilter[]{};
-
-        //nfcAdapter.enableForegroundDispatch(this,pendingIntent,intentFilters,null);
-//        getAdapter();
-    }
-
-    private void getAdapter() {
-//        if (nfcAdapter == null) {
-////            NfcManager manager = (NfcManager) getSystemService(NFC_SERVICE);
-////            nfcAdapter = manager.getDefaultAdapter();
-//            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-//        }
-//        return nfcAdapter;
-        if(nfcAdapter==null)
-        {
-            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        }
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null);
-    }
-
-
-    @Override
-    protected void onPause() {
-        //nfcAdapter.disableForegroundDispatch(this);
-        super.onPause();
-    }
-
-    public String getTextFromNdefRecord(NdefRecord ndefRecord){
-        String tagContent = null;
-        try{
-            byte[] payload = ndefRecord.getPayload();
-            String textEncoding = ((payload[0] & 128) == 0)?"UTF-8":"UTF-16";
-            int langangueSize = payload[0] & 0063;
-            tagContent = new String(payload,langangueSize + 1,payload.length - langangueSize - 1,textEncoding);
-        }catch (UnsupportedEncodingException e){
-            Log.e("getTextFromNdefRecord: ",e.getMessage(),e );
-        }
-        return tagContent;
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
@@ -136,4 +65,25 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+    @Override
+    protected void onResume() {
+
+        Intent intent = new Intent(this,NfcActivity.class);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
+        IntentFilter[] intentFilters = new IntentFilter[]{};
+
+        nfcAdapter.enableForegroundDispatch(this,pendingIntent,intentFilters,null);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        nfcAdapter.disableForegroundDispatch(this);
+        super.onPause();
+
+    }
+
 }
