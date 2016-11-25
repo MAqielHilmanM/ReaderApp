@@ -6,28 +6,32 @@ import java.util.List;
  * Created by root on 11/24/16.
  */
 
-public class StickerIdByPack extends BaseDao<StickerIdByPack> {
-    private List<String> packs;
-    private StickerId sticker_ids;
+public class StickerIdByPack extends BaseDao<StickerIdByPack.stickerIdbyPack> {
+    public class stickerIdbyPack{
 
-    public StickerId getSticker_ids() {
-        return sticker_ids;
-    }
+        private List<String> packs;
+        private List<StickerId> sticker_ids;
 
-    public List<String> getPacks() {
-        return packs;
-    }
+        public List<StickerId> getSticker_ids() {
+            return sticker_ids;
+        }
 
-    class StickerId{
-        private String Id;
+        public List<String> getPacks() {
+            return packs;
+        }
+
+        }
+    public class StickerId{
+        private String id;
         private int number;
 
         public String getId() {
-            return Id;
+            return id;
         }
 
         public int getNumber() {
             return number;
         }
+
     }
 }

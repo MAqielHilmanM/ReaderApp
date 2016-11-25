@@ -1,5 +1,7 @@
 package gits.helpers;
 
+import java.util.List;
+
 import gits.helpers.dao.AddDeleteDao;
 import gits.helpers.dao.InsertStickerPack;
 import gits.helpers.dao.PackDao;
@@ -49,7 +51,7 @@ public interface ApiInterface {
     @GET("/stroomhead/sticker/availablepacks")
     Call<PackDao> GetAvailablePack();
 
-    @GET("stroomhead/sticker/pack/all")
+    @GET("/stroomhead/sticker/pack/all")
     Call<PackDao> GetAllPack();
 
     @GET("/stroomhead/sticker/pack/usedbycompanies")
