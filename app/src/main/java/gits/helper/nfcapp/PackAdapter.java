@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import gits.helpers.dao.PackDao;
+
 /**
  * Created by root on 24/11/16.
  */
 
 public class PackAdapter extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
-    List<String> list = new ArrayList<>();
+    List<PackDao> list = new ArrayList<>();
 
-    public PackAdapter(List<String> dummy) {
+    public PackAdapter(List<PackDao> dummy) {
         list.addAll(dummy);
     }
 
