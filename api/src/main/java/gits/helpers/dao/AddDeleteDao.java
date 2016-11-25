@@ -9,6 +9,12 @@ public class AddDeleteDao extends BaseDao<Boolean> {
         private String nama;
         private List list;
 
+        public DeleteRequest(String nama, List list) {
+            this.nama = nama;
+            this.list = list;
+        }
+
+
         public List getList() {
             return list;
         }
@@ -20,6 +26,11 @@ public class AddDeleteDao extends BaseDao<Boolean> {
         public static class List{
             private String name;
             private String description;
+
+            public List(String name, String description) {
+                this.name = name;
+                this.description = description;
+            }
 
             public String getName() {
                 return name;

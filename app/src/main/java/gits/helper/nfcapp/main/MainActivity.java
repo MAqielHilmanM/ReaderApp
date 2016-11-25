@@ -1,4 +1,4 @@
-package gits.helper.nfcapp;
+package gits.helper.nfcapp.main;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -18,6 +18,9 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import gits.helper.nfcapp.NfcActivity;
+import gits.helper.nfcapp.PackAdapter;
+import gits.helper.nfcapp.R;
 import gits.helper.nfcapp.model.Constant;
 import gits.helpers.ApiClient;
 import gits.helpers.dao.PackDao;
@@ -68,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        Tester test = new Tester();
-//
-//        test.testStickerByIdPack("74c2889b-6c4a-4ceb-97c3-cf5186e6bb6a",1);
-
-
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter != null && nfcAdapter.isEnabled()){
             Log.e(TAG, "onCreate: "+"Nfc Available" );
@@ -86,20 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
     @Override
     protected void onResume() {
