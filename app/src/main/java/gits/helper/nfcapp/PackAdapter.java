@@ -4,6 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +18,10 @@ import gits.helpers.dao.PackDao;
  */
 
 public class PackAdapter extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
-    List<PackDao> list = new ArrayList<>();
+    List<PackDao.AllPackDao> list = new ArrayList<>();
 
-    public PackAdapter(List<PackDao> dummy) {
-        list.addAll(dummy);
+    public PackAdapter(List<PackDao.AllPackDao> dummy) {
+        list = dummy;
     }
 
     @Override
@@ -29,6 +32,9 @@ public class PackAdapter extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.tvTotal.setText("Total " + list.get(position).getTotal_sticker());
+        holder.tvTitle.setText(list.get(position).getName());
+        holder.tvStat.setText("Status "+ (list.get(position).getUsed() == 0 ? "Belum Terpakai" : "Terpakai"));
     }
 
     @Override
@@ -37,8 +43,12 @@ public class PackAdapter extends RecyclerView.Adapter<PackAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitle, tvStat, tvTotal;
         public ViewHolder(View itemView) {
             super(itemView);
+            tvTitle = (TextView) itemView.findViewById(R.id.pack_name);
+            tvStat = (TextView) itemView.findViewById(R.id.pack_stat);
+            tvTotal = (TextView) itemView.findViewById(R.id.total_Sticker);
         }
     }
 }

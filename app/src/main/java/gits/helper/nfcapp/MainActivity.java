@@ -18,15 +18,21 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import gits.helper.nfcapp.model.Constant;
+import gits.helpers.ApiClient;
 import gits.helpers.dao.PackDao;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     NfcAdapter nfcAdapter;
     private static final String TAG = "NFC" ;
     private PackAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private List<PackDao> mData = new ArrayList<>();
+    private List<PackDao.AllPackDao> mData = new ArrayList<>();
     private boolean isNfcAvailable = false;
+    ApiClient apiClient;
 
 
     @Override
@@ -42,13 +48,29 @@ public class MainActivity extends AppCompatActivity {
         rc.setLayoutManager(layoutManager);
         rc.setAdapter(adapter);
 
+        apiClient = new ApiClient(Constant.BASE_URL);
 
-        Tester test = new Tester();
-//        test.getAvailablePack();
-//        test.getPackSticker("a0900fba-28eb-40af-9e3e-6dcca9e29c2a");
-//        test.testAllPack();
-//        test.getPackUsedByCompanies();
-        test.testStickerByIdPack("74c2889b-6c4a-4ceb-97c3-cf5186e6bb6a",1);
+        Call<PackDao> call = apiClient.getApiInteface().GetAllPack();
+        call.enqueue(new Callback<PackDao>() {
+            @Override
+            public void onResponse(Call<PackDao> call, Response<PackDao> response) {
+                for (PackDao.AllPackDao data: response.body().getData()) {
+                    mData.add(data);
+                    Log.wtf("onResponse: ", data.getName());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PackDao> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+            }
+        });
+
+
+//        Tester test = new Tester();
+//
+//        test.testStickerByIdPack("74c2889b-6c4a-4ceb-97c3-cf5186e6bb6a",1);
 
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -59,18 +81,11 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: "+"Nfc Not Available");
             isNfcAvailable = false;
         }
+
+
+
     }
 
-    public void Scan(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(MainActivity.this
-        );
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan a QR Code");
-        integrator.setCaptureActivity(ScanBarcode.class);
-        integrator.setBeepEnabled(true);
-        integrator.setBarcodeImageEnabled(false);
-        integrator.initiateScan();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

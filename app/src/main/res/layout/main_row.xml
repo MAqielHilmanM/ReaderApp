@@ -4,10 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Hello"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/pack_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="16dp"
+            android:textSize="24sp"
+            android:text="Hello" />
+
+        <TextView
+            android:id="@+id/total_Sticker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Total 20"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/pack_stat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/total_Sticker"
+            android:padding="16dp"
+            android:text="Status : Terpakai"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
