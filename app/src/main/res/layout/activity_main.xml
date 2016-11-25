@@ -11,6 +11,7 @@
     tools:context="gits.helper.nfcapp.MainActivity">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rc_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

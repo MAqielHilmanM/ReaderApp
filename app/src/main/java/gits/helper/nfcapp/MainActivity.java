@@ -11,6 +11,8 @@ import android.nfc.NfcManager;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -20,23 +22,42 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter[] intentFilters;
+    PackAdapter adapter;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.rc_main);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter != null && nfcAdapter.isEnabled()){
             Toast.makeText(this,"NfC Available",Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this,"NfC not Available",Toast.LENGTH_SHORT).show();
         }
+
+        List<String> dummy = new ArrayList<>();
+        dummy.add("Hello");
+        dummy.add("Hello");
+        dummy.add("Hello");
+        dummy.add("Hello");
+        dummy.add("Hello");
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new PackAdapter(dummy);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter.notifyDataSetChanged();
     }
 
     public void Scan(View view) {
@@ -102,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         }
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null);
     }
-
 
     @Override
     protected void onPause() {
