@@ -18,6 +18,8 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import gits.helpers.dao.AddDeleteDao;
+import gits.helpers.dao.InsertStickerPack;
 import gits.helpers.dao.PackDao;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,8 +50,21 @@ public class MainActivity extends AppCompatActivity {
 //        test.getPackSticker("a0900fba-28eb-40af-9e3e-6dcca9e29c2a");
 //        test.testAllPack();
 //        test.getPackUsedByCompanies();
-        test.testStickerByIdPack("74c2889b-6c4a-4ceb-97c3-cf5186e6bb6a",1);
+//        test.testStickerByIdPack("74c2889b-6c4a-4ceb-97c3-cf5186e6bb6a",1);
+/*
+        InsertStickerPack.PackReqeust.ListSticker listSticker = new InsertStickerPack.PackReqeust.ListSticker("Sample",2);
+            test.addStickerToPack("0b773555-8a25-4ac6-bb47-3e38cfb7a9fd",listSticker);
+*/
 
+        AddDeleteDao.DeleteRequest.List listStickers = new AddDeleteDao.DeleteRequest.List("new-id","area");
+        AddDeleteDao.DeleteRequest deleteRequest = new AddDeleteDao.DeleteRequest("pack test 10",listStickers);
+        test.deleteAStickerFromAPack("a0900fba-28eb-40af-9e3e-6dcca9e29c2a",deleteRequest);
+/*
+        List list = new ArrayList();
+        list.add(new InsertStickerPack.PackReqeust.ListSticker("Sample Id",1));
+        InsertStickerPack.PackReqeust packrequest = new InsertStickerPack.PackReqeust("pack testing" , list);
+        test.insertStickerPack(1,packrequest);
+        */
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter != null && nfcAdapter.isEnabled()){

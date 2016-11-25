@@ -4,6 +4,8 @@ import android.util.Log;
 
 import gits.helper.nfcapp.model.Constant;
 import gits.helpers.ApiClient;
+import gits.helpers.dao.AddDeleteDao;
+import gits.helpers.dao.InsertStickerPack;
 import gits.helpers.dao.PackDao;
 import gits.helpers.dao.PackStickerDao;
 import gits.helpers.dao.PackUsedByCompanyDao;
@@ -21,6 +23,53 @@ public class Tester {
     public static final String TAG = "TESTER";
 
     ApiClient apiClient = new ApiClient(Constant.BASE_URL);
+
+    public void deleteAStickerFromAPack(String packId, AddDeleteDao.DeleteRequest map){
+        Call<AddDeleteDao> call = apiClient.getApiInteface().HttpDeleteStickerFromPack(packId, map);
+        call.enqueue(new Callback<AddDeleteDao>() {
+            @Override
+            public void onResponse(Call<AddDeleteDao> call, Response<AddDeleteDao> response) {
+                Log.e(TAG, "onResponse: "+response.message() );
+            }
+
+            @Override
+            public void onFailure(Call<AddDeleteDao> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+            }
+        });
+    }
+
+    public void insertStickerPack(int dryrun , InsertStickerPack.PackReqeust map){
+        Call<InsertStickerPack> call = apiClient.getApiInteface().InsertStickerPack(dryrun, map);
+        call.enqueue(new Callback<InsertStickerPack>() {
+            @Override
+            public void onResponse(Call<InsertStickerPack> call, Response<InsertStickerPack> response) {
+                Log.e(TAG, "onResponse: "+response.body().getData() );
+            }
+
+            @Override
+            public void onFailure(Call<InsertStickerPack> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+            }
+        });
+
+    }
+
+    public void addStickerToPack(String idSticker, InsertStickerPack.PackReqeust.ListSticker listSticker){
+//        InsertStickerPack.PackReqeust.ListSticker listSticker = new InsertStickerPack.PackReqeust.ListSticker("id",22);
+        Call<AddDeleteDao> call = apiClient.getApiInteface().AddStickerToAPack(idSticker,listSticker);
+        call.enqueue(new Callback<AddDeleteDao>() {
+            @Override
+            public void onResponse(Call<AddDeleteDao> call, Response<AddDeleteDao> response) {
+                Log.e(TAG, "onResponse: "+response.message() );
+            }
+
+            @Override
+            public void onFailure(Call<AddDeleteDao> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+            }
+        });
+    }
 
     public void getAvailablePack(){
         Call<PackDao> call = apiClient.getApiInteface().GetAvailablePack();

@@ -12,6 +12,11 @@ public class InsertStickerPack extends BaseDao<String> {
         private String name;
         private List<ListSticker> list;
 
+        public PackReqeust(String name, List<ListSticker> list) {
+            this.name = name;
+            this.list = list;
+        }
+
         public String getName() {
             return name;
         }
@@ -22,13 +27,18 @@ public class InsertStickerPack extends BaseDao<String> {
 
         public static class ListSticker{
             private String id;
-            private String number;
+            private int number;
+
+            public ListSticker(String id, int number) {
+                this.id = id;
+                this.number = number;
+            }
 
             public String getId() {
                 return id;
             }
 
-            public String getNumber() {
+            public int getNumber() {
                 return number;
             }
         }

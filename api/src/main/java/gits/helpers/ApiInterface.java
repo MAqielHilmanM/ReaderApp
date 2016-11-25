@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -36,8 +37,14 @@ public interface ApiInterface {
             @Path("packId") String packId,
             @Body AddDeleteDao.DeleteRequest map
     );
+
+    @HTTP(method = "DELETE" ,path = "/stroomhead/sticker/pack/{packId}/delete/new-id",hasBody = true)
+    Call<AddDeleteDao> HttpDeleteStickerFromPack(
+            @Path("packId") String packId,
+            @Body AddDeleteDao.DeleteRequest map
+    );
         @POST("/stroomhead/sticker/pack/{packId}/delete/new-id")
-        Call<AddDeleteDao> PostStickerFromPack(
+        Call<AddDeleteDao> PostDeleteStickerFromPack(
                 @Path("packId") String packId,
                 @Body AddDeleteDao.DeleteRequest map
         );
