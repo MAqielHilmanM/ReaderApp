@@ -25,6 +25,11 @@ public class StickerIdByPack extends BaseDao<StickerIdByPack.stickerIdbyPack> {
         private String id;
         private int number;
 
+        public StickerId(String id, int number) {
+            this.id = id;
+            this.number = number;
+        }
+
         public String getId() {
             return id;
         }

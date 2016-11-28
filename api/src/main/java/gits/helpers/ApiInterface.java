@@ -27,11 +27,13 @@ public interface ApiInterface {
         @Query("dryrun") int dryrun,
         @Body InsertStickerPack.PackReqeust map
     );
+
     @POST("/stroomhead/sticker/pack/{packId}")
     Call<AddDeleteDao> AddStickerToAPack(
             @Path("packId") String id,
             @Body InsertStickerPack.PackReqeust.ListSticker map
             );
+
     @DELETE("/stroomhead/sticker/pack/{packId}/delete/new-id")
     Call<AddDeleteDao> DeleteStickerFromPack(
             @Path("packId") String packId,

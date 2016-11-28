@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     NfcAdapter nfcAdapter;
     private static final String TAG = "NFC" ;
     private PackAdapter adapter;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private List<PackDao.AllPackDao> mData = new ArrayList<>();
     private boolean isNfcAvailable = false;
     ApiClient apiClient;
+    Call<PackDao> call;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.rc_main);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         adapter = new PackAdapter(mData);
         layoutManager = new LinearLayoutManager(this);
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         apiClient = new ApiClient(Constant.BASE_URL);
 
-        Call<PackDao> call = apiClient.getApiInteface().GetAllPack();
+        call = apiClient.getApiInteface().GetAllPack();
         call.enqueue(new Callback<PackDao>() {
             @Override
             public void onResponse(Call<PackDao> call, Response<PackDao> response) {
@@ -106,6 +112,30 @@ public class MainActivity extends AppCompatActivity {
             nfcAdapter.disableForegroundDispatch(this);
         }
         super.onPause();
+
+    }
+
+    @Override
+    public void onRefresh() {
+        call.clone().enqueue(new Callback<PackDao>() {
+            @Override
+            public void onResponse(Call<PackDao> call, Response<PackDao> response) {
+                mData.clear();
+                for (PackDao.AllPackDao data: response.body().getData()) {
+                    mData.add(data);
+                    Log.wtf("onResponse: ", data.getName());
+                    adapter.notifyDataSetChanged();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<PackDao> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 }

@@ -4,7 +4,12 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gits.helper.nfcapp.MainActivity">
+    tools:context="gits.helper.nfcapp.main.MainActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_main"
@@ -13,4 +18,5 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

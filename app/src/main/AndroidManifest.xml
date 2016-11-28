@@ -19,7 +19,7 @@
         <activity
             android:name=".ScanBarcode"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
